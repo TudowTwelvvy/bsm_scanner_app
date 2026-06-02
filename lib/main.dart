@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  //for telling flutter to bind to the phone's os before running async code
+  //for telling flutter to bind to the phone's os before running async code.
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
