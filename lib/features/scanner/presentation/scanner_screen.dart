@@ -1,10 +1,14 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:uuid/uuid.dart';
+import '../../../core/providers/firebase_providers.dart';
+import '../data/product_repository.dart';
+import '../domain/product_entity.dart';
 
-class ScannerScreen extends StatefulWidget {
+/*class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
 
   @override
@@ -296,6 +300,221 @@ class _ScanOverlayPainter extends CustomPainter {
       scanWindow.bottomRight + const Offset(0, -length),
       cornerPaint,
     );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}*/
+
+class ScannerScreen extends ConsumerStatefulWidget {
+  const ScannerScreen({super.key});
+
+  @override
+  ConsumerState<ScannerScreen> createState() => _ScannerScreenState();
+}
+
+class _ScannerScreenState extends ConsumerState<ScannerScreen> {
+  final MobileScannerController _controller = MobileScannerController();
+  StreamSubscription<BarcodeCapture>? _subscription;
+  bool _hasScanned = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.start();
+    _subscription = _controller.barcodes.listen(_onBarcodeDetected);
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onBarcodeDetected(BarcodeCapture capture) {
+    if (_hasScanned || capture.barcodes.isEmpty) return;
+
+    final barcode = capture.barcodes.first;
+    if (barcode.rawValue == null) return;
+
+    setState(() => _hasScanned = true);
+    _controller.stop();
+
+    _showSaveDialog(barcode);
+  }
+
+  void _showSaveDialog(Barcode barcode) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        icon: const Icon(Icons.qr_code_scanner, size: 48, color: Color(0xFF1A73E8)),
+        title: const Text('Scan Complete'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              barcode.rawValue!,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text('Type: ${barcode.type.name}', style: const TextStyle(color: Colors.grey)),
+            const SizedBox(height: 16),
+            const Text('Save this scan to your history?'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+
+              if (mounted) {
+                  context.go('/home');
+              }
+
+              _resetScanner();
+            },
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+             final messenger = ScaffoldMessenger.of(this.context);
+             final navigator = Navigator.of(context);
+
+             await _saveScan(barcode);
+
+             if (!mounted) return;
+
+             navigator.pop();
+
+            messenger.showSnackBar(
+              const SnackBar(
+              content: Text('Scan saved!'),
+              ),
+            );
+  
+           _resetScanner();
+            },
+         child: const Text('Save Scan'),
+        )
+        ],
+      ),
+    );
+  }
+
+  Future<void> _saveScan(Barcode barcode) async {
+    final user = ref.read(authStateChangesProvider).value;
+
+    if (user == null) return;
+
+    final product = ProductEntity(
+      id: const Uuid().v4(),
+      barcode: barcode.rawValue!,
+      barcodeType: barcode.type.name,
+      scannedAt: DateTime.now(),
+      userId: user.uid,
+    );
+
+    // We ask Riverpod for the repository, then tell it to save.
+    // The screen does not know HOW it saves (Firestore? SQLite? API?). It just asks.
+    await ref.read(productRepositoryProvider).saveProduct(product);
+  }
+
+  void _resetScanner() {
+    setState(() => _hasScanned = false);
+    _controller.start();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Scan Product'),
+        backgroundColor: const Color(0xFF1A73E8),
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: ValueListenableBuilder(
+              valueListenable: _controller,
+              builder: (context, state, child) {
+                return Icon(
+                  state.torchState == TorchState.on ? Icons.flash_on : Icons.flash_off,
+                );
+              },
+            ),
+            onPressed: () => _controller.toggleTorch(),
+          ),
+          IconButton(
+            icon: const Icon(Icons.flip_camera_ios),
+            onPressed: () => _controller.switchCamera(),
+          ),
+        ],
+      ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          MobileScanner(controller: _controller),
+          CustomPaint(
+            painter: _ScanOverlayPainter(),
+            child: const SizedBox.expand(),
+          ),
+          const Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: Text(
+              'Point camera at a barcode or QR code',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                shadows: [Shadow(blurRadius: 8, color: Colors.black)],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ScanOverlayPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.black54;
+    final scanArea = Rect.fromCenter(
+      center: Offset(size.width / 2, size.height / 2),
+      width: size.width * 0.75,
+      height: size.width * 0.75,
+    );
+
+    canvas.drawPath(
+      Path.combine(
+        PathOperation.difference,
+        Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
+        Path()..addRRect(RRect.fromRectAndRadius(scanArea, const Radius.circular(12))),
+      ),
+      paint,
+    );
+
+    final cornerPaint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 4
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    const cornerLength = 30.0;
+
+    canvas.drawLine(scanArea.topLeft, scanArea.topLeft + const Offset(cornerLength, 0), cornerPaint);
+    canvas.drawLine(scanArea.topLeft, scanArea.topLeft + const Offset(0, cornerLength), cornerPaint);
+    canvas.drawLine(scanArea.topRight, scanArea.topRight + const Offset(-cornerLength, 0), cornerPaint);
+    canvas.drawLine(scanArea.topRight, scanArea.topRight + const Offset(0, cornerLength), cornerPaint);
+    canvas.drawLine(scanArea.bottomLeft, scanArea.bottomLeft + const Offset(cornerLength, 0), cornerPaint);
+    canvas.drawLine(scanArea.bottomLeft, scanArea.bottomLeft + const Offset(0, -cornerLength), cornerPaint);
+    canvas.drawLine(scanArea.bottomRight, scanArea.bottomRight + const Offset(-cornerLength, 0), cornerPaint);
+    canvas.drawLine(scanArea.bottomRight, scanArea.bottomRight + const Offset(0, -cornerLength), cornerPaint);
   }
 
   @override
