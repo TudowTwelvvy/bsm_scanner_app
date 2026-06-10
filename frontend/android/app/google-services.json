@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "593594404324",
+    "project_id": "bsm-scanner",
+    "storage_bucket": "bsm-scanner.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593594404324:android:5593d282db4dd5e5f1cbf1",
+        "android_client_info": {
+          "package_name": "com.example.bsm_scanner_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuGO1V3tGjYliS_6VxNhWmshqx1bO78po"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
