@@ -159,3 +159,4 @@ C:\Users\cash\flutter-projects\bsm_scanner_app\api\obj\Debug\net10.0\refint\api.
 C:\Users\cash\flutter-projects\bsm_scanner_app\api\obj\Debug\net10.0\api.pdb
 C:\Users\cash\flutter-projects\bsm_scanner_app\api\obj\Debug\net10.0\api.genruntimeconfig.cache
 C:\Users\cash\flutter-projects\bsm_scanner_app\api\obj\Debug\net10.0\ref\api.dll
+C:\Users\cash\flutter-projects\bsm_scanner_app\api\obj\Debug\net10.0\api.sourcelink.json

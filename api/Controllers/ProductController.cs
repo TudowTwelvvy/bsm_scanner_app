@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.DTOs.Product;
+using api.Mappers;
+using api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -20,9 +23,10 @@ namespace api.Controllers
         [HttpGet]
         public IActionResult GetProducts()
         {
-            var products = _context.Products.ToList();
+            var products = _context.Products.Select(p => ProductMappers.ToProductDto(p)).ToList();
             return Ok(products);
         }
+
 
         [HttpGet("{id}")]
         public IActionResult GetProduct(int id)
@@ -32,7 +36,7 @@ namespace api.Controllers
             {
                 return NotFound();
             }
-            return Ok(product);
+            return Ok(ProductMappers.ToProductDto(product));
         }
     }
 }
