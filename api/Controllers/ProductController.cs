@@ -38,5 +38,15 @@ namespace api.Controllers
             }
             return Ok(ProductMappers.ToProductDto(product));
         }
+
+        [HttpPost]
+        public IActionResult CreateProduct([FromBody] CreateProductReqDto createProductReqDto)
+        {
+            var product = ProductMappers.ToProduct(createProductReqDto);
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, ProductMappers.ToProductDto(product));
+        }
+
     }
 }

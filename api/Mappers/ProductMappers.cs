@@ -22,5 +22,18 @@ namespace api.Mappers
     
             };
         }
+
+        public static Product ToProduct(CreateProductReqDto createProductReqDto)
+        {
+            return new Product
+            {
+                Barcode = createProductReqDto.Barcode,
+                ProductName = createProductReqDto.ProductName,
+                Notes = createProductReqDto.Notes,
+                BarCodeType = createProductReqDto.BarCodeType,
+                //ScannedAt = createProductReqDto.ScannedAt,
+                //UserId = createProductReqDto.UserId
+            };
+        }
     }
 }
