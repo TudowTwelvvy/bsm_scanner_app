@@ -35,5 +35,18 @@ namespace api.Mappers
                 //UserId = createProductReqDto.UserId
             };
         }
+
+        public static void UpdateProductFromDto(Product product, UpdateProductReqDto updateProductReqDto)
+        {
+            if (updateProductReqDto.ProductName != null)
+            {
+                product.ProductName = updateProductReqDto.ProductName;
+            }
+            if (updateProductReqDto.Notes != null)
+            {
+                product.Notes = updateProductReqDto.Notes;
+            }
+        }
+
     }
 }

@@ -48,5 +48,33 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, ProductMappers.ToProductDto(product));
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateProduct(int id, [FromBody] UpdateProductReqDto updateProductReqDto)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            /*product.ProductName = updateProductReqDto.ProductName ?? product.ProductName;
+            product.Notes = updateProductReqDto.Notes ?? product.Notes;*/
+            ProductMappers.UpdateProductFromDto(product, updateProductReqDto);
+            _context.SaveChanges();
+            return Ok(ProductMappers.ToProductDto(product));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteProduct(int id)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+            return NoContent();
+        }
+
     }
 }
