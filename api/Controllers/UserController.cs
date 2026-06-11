@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Interfaces;
+using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
     [Route("api/user")]
+    [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserRespository _userRespository;
@@ -20,7 +22,8 @@ namespace api.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userRespository.GetAllUsersAsync();
-            return Ok(users);
+            var userDtos = users.Select(UserMapper.ToUserDto).ToList(); 
+            return Ok(userDtos);
         }
 
         [HttpGet("{id}")]
@@ -31,7 +34,7 @@ namespace api.Controllers
             {
                 return NotFound();
             }
-            return Ok(user);
+            return Ok(UserMapper.ToUserDto(user));
         
         }
     }

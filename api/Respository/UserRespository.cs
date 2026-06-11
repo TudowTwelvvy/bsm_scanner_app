@@ -21,12 +21,12 @@ namespace api.Respository
         public async Task<List<User>> GetAllUsersAsync()
         {
 
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Include(u => u.Products).ToListAsync();
         }
 
         public async Task<User?> GetUserByIdAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users.Include(u => u.Products).FirstOrDefaultAsync(u => u.Id == id);
         }
     }
 }
