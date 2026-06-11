@@ -22,7 +22,7 @@ namespace api.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userRespository.GetAllUsersAsync();
-            var userDtos = users.Select(UserMapper.ToUserDto).ToList(); 
+            var userDtos = users.Select(u=>UserMapper.ToUserDto(u)).ToList(); 
             return Ok(userDtos);
         }
 

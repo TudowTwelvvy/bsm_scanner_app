@@ -46,7 +46,7 @@ namespace api.Controllers
             return Ok(ProductMappers.ToProductDto(product));
         }
 
-        [HttpPost]
+        [HttpPost()]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductReqDto createProductReqDto)
         {
             var product = ProductMappers.ToProduct(createProductReqDto);
@@ -80,6 +80,7 @@ namespace api.Controllers
             await _productRespository.DeleteProductAsync(id);
             return NoContent();
         }
+
 
     }
 }
