@@ -7,6 +7,8 @@ using api.DTOs.Product;
 using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace api.Controllers
 {
@@ -21,17 +23,18 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetProducts()
+        public async Task<IActionResult> GetProducts()
         {
-            var products = _context.Products.Select(p => ProductMappers.ToProductDto(p)).ToList();
+             var products = await _context.Products.Select(p => ProductMappers.ToProductDto(p)).ToListAsync();
+             //var products = await _context.Products.Select(p => ProductMappers.ToProductDto(p)).ToListAsync();
             return Ok(products);
         }
 
 
         [HttpGet("{id}")]
-        public IActionResult GetProduct(int id)
+        public async Task<IActionResult> GetProduct(int id)
         {
-            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -49,9 +52,9 @@ namespace api.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateProduct(int id, [FromBody] UpdateProductReqDto updateProductReqDto)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductReqDto updateProductReqDto)
         {
-            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -64,9 +67,9 @@ namespace api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return NotFound();
