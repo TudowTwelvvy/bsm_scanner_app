@@ -21,7 +21,9 @@ namespace api.Models
         [EmailAddress] // Validates email format
         public string Email { get; set; } = string.Empty;
         [Required]
-        public string PasswordHash { get; set; } = string.Empty;        public string? DisplayName { get; set; }
+        public string PasswordHash { get; set; } = string.Empty;       
+         public string? DisplayName { get; set; }
+       
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         
         // Navigation property
