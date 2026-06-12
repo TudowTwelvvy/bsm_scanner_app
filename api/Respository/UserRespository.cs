@@ -11,7 +11,7 @@ namespace api.Respository
 {
     public class UserRespository : IUserRespository
     {
-        private readonly ApplicationDBContext _context;
+        /*private readonly ApplicationDBContext _context;
         public UserRespository(ApplicationDBContext context)
         {
             _context = context;
@@ -27,6 +27,6 @@ namespace api.Respository
         public async Task<User?> GetUserByIdAsync(int id)
         {
             return await _context.Users.Include(u => u.Products).FirstOrDefaultAsync(u => u.Id == id);
-        }
+        }*/
     }
 }

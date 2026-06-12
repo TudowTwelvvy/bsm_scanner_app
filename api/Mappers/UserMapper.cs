@@ -17,7 +17,7 @@ namespace api.Mappers
                 Email = user.Email,
                 DisplayName = user.DisplayName,
                 CreatedAt = user.CreatedAt,
-                Products = user.Products.Select(p => ProductMappers.ToProductDto(p)).ToList()
+                //Products = user.Products.Select(p => ProductMappers.ToProductDto(p)).ToList()
             };
         }
 

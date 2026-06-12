@@ -9,12 +9,12 @@ namespace api.DTOs.Auth
     public class RegisterReqDto
     {
         [Required] // Cannot be null
-        [MaxLength(255)] // VARCHAR(255)
         [EmailAddress]
        public string Email { get; set; } = string.Empty;
        [Required]
        [MinLength(6)]
        public string Password { get; set; } = string.Empty;
+        [MaxLength(100)]
        public string? DisplayName { get; set; }
     }
 }

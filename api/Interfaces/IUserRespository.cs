@@ -8,7 +8,7 @@ namespace api.Interfaces
 {
     public interface IUserRespository
     {
-        Task<List<User>> GetAllUsersAsync();
-        Task<User?> GetUserByIdAsync(int id);
+        /*Task<List<User>> GetAllUsersAsync();
+        Task<User?> GetUserByIdAsync(int id);*/
     }
 }

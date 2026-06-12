@@ -28,6 +28,11 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var products = await _productRespository.GetAllProductsAsync();
              //var products = await _context.Products.Select(p => ProductMappers.ToProductDto(p)).ToListAsync();
              //var products = await _context.Products.Select(p => ProductMappers.ToProductDto(p)).ToListAsync();
@@ -38,6 +43,11 @@ namespace api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var product = await _productRespository.GetProductByIdAsync(id);
             if (product == null)
             {
@@ -49,6 +59,11 @@ namespace api.Controllers
         [HttpPost()]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductReqDto createProductReqDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var product = ProductMappers.ToProduct(createProductReqDto);
             await _productRespository.CreateProductAsync(product);
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, ProductMappers.ToProductDto(product));
@@ -57,6 +72,11 @@ namespace api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductReqDto updateProductReqDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var product = await _productRespository.GetProductByIdAsync(id);
             if (product == null)
             {
@@ -72,6 +92,11 @@ namespace api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
             var product = await _productRespository.GetProductByIdAsync(id);
             if (product == null)
             {

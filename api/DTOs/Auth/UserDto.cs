@@ -16,9 +16,10 @@ namespace api.DTOs.User
         [EmailAddress] // Validates email format
         public string Email { get; set; } = string.Empty;
         public string? DisplayName { get; set; }
+        public IList<string> Roles { get; set; } = new List<string>();
         public DateTime CreatedAt { get; set; }
 
-        public List<ProductDto> Products { get; set; } = new();
+        //public List<ProductDto> Products { get; set; } = new();
    
     }
 }

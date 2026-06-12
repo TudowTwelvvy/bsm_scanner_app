@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.DTOs.Auth;
+using api.DTOs.User;
 using api.Models;
 
 namespace api.Mappers
@@ -18,19 +19,20 @@ namespace api.Mappers
             };
         }
 
-        public static User ToUser(RegisterReqDto registerReqDto)
+        public static AppUser ToUser(RegisterReqDto registerReqDto)
         {
-            return new User
+            return new AppUser
             {
                 Email = registerReqDto.Email,
                 PasswordHash = registerReqDto.Password,
-                DisplayName = registerReqDto.DisplayName
+                DisplayName = registerReqDto.DisplayName,
+                EmailConfirmed = true //skip confirmation for now
             };
         }
 
-        public static User ToUser(LoginRequest loginReqDto)
+        public static AppUser ToUser(LoginRequest loginReqDto)
         {
-            return new User
+            return new AppUser
             {
                 Email = loginReqDto.Email,
                 PasswordHash = loginReqDto.Password
