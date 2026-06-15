@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Threading.Tasks;
 using api.DTOs.Product;
@@ -9,7 +10,7 @@ namespace api.Mappers
 {
     public class ProductMappers
     {
-        public static ProductDto ToProductDto(Product product)
+        /*public static ProductDto ToProductDto(Product product)
         {
             return new ProductDto
             {
@@ -21,9 +22,9 @@ namespace api.Mappers
                 ScannedAt = product.ScannedAt,
     
             };
-        }
+        }*/
 
-        public static Product ToProduct(CreateProductReqDto createProductReqDto)
+        /*public static Product ToProduct(CreateProductReqDto createProductReqDto)
         {
             return new Product
             {
@@ -34,9 +35,9 @@ namespace api.Mappers
                 //ScannedAt = createProductReqDto.ScannedAt,
                 //UserId = createProductReqDto.UserId
             };
-        }
+        }*/
 
-        public static void UpdateProductFromDto(Product product, UpdateProductReqDto updateProductReqDto)
+        public static void UpdateProductFromDto( Product product, UpdateProductReqDto updateProductReqDto)
         {
             if (updateProductReqDto.ProductName != null)
             {

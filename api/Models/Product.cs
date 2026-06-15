@@ -4,13 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using api.DTOs.Product;
 
 namespace api.Models
 {
     public class Product
     {
         [Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
        
         public string Barcode { get; set; } = string.Empty;
@@ -25,15 +26,28 @@ namespace api.Models
         
         // Foreign key to User
         // This indicates which user scanned this product
-        public int? UserId { get; set; }
+        //public int? UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
+
+
+
         // Navigation property
         // This allows us to access the User associated with this Product
         //[ForeignKey(nameof(UserId))]// This attribute specifies that the UserId property is a foreign key that references the User entity
-        public User? User { get; set; }
+        [ForeignKey(nameof(UserId))]
+        public AppUser User { get; set; } = null!;
 
-        internal object? ToProductDto()
+        public ProductDto ToProductDto()
         {
-            throw new NotImplementedException();
+            return new ProductDto
+            {
+                Id = this.Id,
+                Barcode = this.Barcode,
+                ProductName = this.ProductName,
+                Notes = this.Notes,
+                BarCodeType = this.BarCodeType,
+                ScannedAt = this.ScannedAt
+            };
         }
     }
 }

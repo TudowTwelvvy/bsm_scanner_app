@@ -22,17 +22,30 @@ namespace api.Data
 {
     base.OnModelCreating(builder);
 
+    builder.Entity<Product>(entity =>
+            {
+                entity.HasIndex(p => p.Barcode);
+                entity.HasIndex(p => p.ScannedAt);
+                entity.HasIndex(p => p.UserId);
+
+                // Cascade delete: when user is deleted, their products are deleted
+                entity.HasOne(p => p.User)
+                      .WithMany(u => u.Products)
+                      .HasForeignKey(p => p.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
     builder.Entity<IdentityRole>().HasData(
         new IdentityRole
         {
-            Id = "11111111-1111-1111-1111-111111111111",
+            Id = "1",
             Name = "User",
             NormalizedName = "USER",
             ConcurrencyStamp = "c1"
         },
         new IdentityRole
         {
-            Id = "22222222-2222-2222-2222-222222222222",
+            Id = "2",
             Name = "Admin",
             NormalizedName = "ADMIN",
             ConcurrencyStamp = "c2"

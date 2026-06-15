@@ -32,12 +32,17 @@ namespace api.Controllers
             _userManager = userManager;
         }
 
-         private int GetCurrentUserId()
+         private string GetCurrentUserId()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                throw new InvalidOperationException("User ID claim not found in token.");
+            }
 
-            //JWT claims are ALWAYS strings. Our database uses int for UserId.
-            return int.Parse(userIdClaim!);
+            //It's a Guid string
+            return userIdClaim!;
         }
 
         //this is Belt-and-suspenders security... The token might be valid but the user could have been deleted from the database since the token was issued.
@@ -84,7 +89,7 @@ namespace api.Controllers
             {
                 return NotFound();
             }
-            return Ok(ProductMappers.ToProductDto(product));
+            return Ok(product.ToProductDto());
         }
 
         [HttpPost()]
@@ -96,10 +101,11 @@ namespace api.Controllers
             }
 
             var userId = GetCurrentUserId();
+             var product = await _productRespository.CreateProductAsync(createProductReqDto, userId);
 
-            var product = ProductMappers.ToProduct(createProductReqDto);
-            await _productRespository.CreateProductAsync(createProductReqDto, userId);
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, ProductMappers.ToProductDto(product));
+            //var product = ProductMappers.ToProduct(createProductReqDto);
+            //await _productRespository.CreateProductAsync(createProductReqDto, userId);
+            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product.ToProductDto());
         }
 
         [HttpPut("{id}")]
@@ -120,7 +126,7 @@ namespace api.Controllers
             /*product.ProductName = updateProductReqDto.ProductName ?? product.ProductName;
             product.Notes = updateProductReqDto.Notes ?? product.Notes;*/
            
-            return Ok(ProductMappers.ToProductDto(product));
+            return Ok(product.ToProductDto());
         }
 
         [HttpDelete("{id}")]

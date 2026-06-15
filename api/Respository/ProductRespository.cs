@@ -20,17 +20,17 @@ namespace api.Respository
             _context = context;
         }
 
-        public async Task<List<Product>> GetAllProductsAsync(int userId)
+        public async Task<List<Product>> GetAllProductsAsync(string userId)
         {
             return await _context.Products.AsNoTracking().Where(p => p.UserId == userId).OrderByDescending(p => p.ScannedAt).ToListAsync();
         }
 
-        public async Task<Product?> GetProductByIdAsync(int id, int userId)
+        public async Task<Product?> GetProductByIdAsync(int id, string userId)
         {
             return await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
         }
 
-        public async Task<Product> CreateProductAsync(CreateProductReqDto createProductReqDto,int userId)
+        public async Task<Product> CreateProductAsync(CreateProductReqDto createProductReqDto,string userId)
         {
             var product = new Product
             {
@@ -46,7 +46,7 @@ namespace api.Respository
             return product;
         }
 
-        public async Task<Product?> UpdateProductAsync(int id, UpdateProductReqDto updateProductReqDto, int userId)
+        public async Task<Product?> UpdateProductAsync(int id, UpdateProductReqDto updateProductReqDto, string userId)
          {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
             if (product == null)
@@ -59,7 +59,7 @@ namespace api.Respository
             return product;
          }
 
-        public async Task<bool> DeleteProductAsync(int id, int userId)
+        public async Task<bool> DeleteProductAsync(int id, string userId)
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
             if (product == null)
@@ -73,7 +73,7 @@ namespace api.Respository
         }
 
         //GET PRODUCT COUNT
-        public async Task<int> GetProductCountAsync(int userId)
+        public async Task<int> GetProductCountAsync(string userId)
         {
             // WHY: CountAsync generates: SELECT COUNT(*) FROM Products WHERE UserId = @userId
             // This is O(1) — SQL Server maintains counts internally.
