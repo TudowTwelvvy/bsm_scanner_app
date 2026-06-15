@@ -5,6 +5,7 @@ using api.Data;
 using api.Interfaces;
 using api.Models;
 using api.Respository;
+using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +77,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped<IProductRespository, ProductRespository>();
 builder.Services.AddScoped<IUserRespository, UserRespository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 

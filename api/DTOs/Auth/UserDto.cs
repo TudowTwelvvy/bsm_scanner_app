@@ -10,7 +10,7 @@ namespace api.DTOs.User
 {
     public class UserDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = string.Empty;
         [Required] // Cannot be null
         [MaxLength(255)] // VARCHAR(255)
         [EmailAddress] // Validates email format

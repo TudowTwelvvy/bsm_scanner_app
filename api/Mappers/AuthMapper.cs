@@ -10,16 +10,18 @@ namespace api.Mappers
 {
     public class AuthMapper
     {
-        public static AuthResDto ToAuthResDto(string token, User user)
+        public static AuthResDto ToAuthResDto(string token, AppUser user, DateTime expiresAt)
         {
             return new AuthResDto
             {
                 Token = token,
+                RefreshToken = string.Empty,
+                ExpiresAt = expiresAt,
                 User = UserMapper.ToUserDto(user)
             };
         }
 
-        public static AppUser ToUser(RegisterReqDto registerReqDto)
+        /*public static AppUser ToUser(RegisterReqDto registerReqDto)
         {
             return new AppUser
             {
@@ -37,6 +39,6 @@ namespace api.Mappers
                 Email = loginReqDto.Email,
                 PasswordHash = loginReqDto.Password
             };
-        }
+        }*/
     }   
 }

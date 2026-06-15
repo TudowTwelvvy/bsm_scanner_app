@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace api.DTOs.Auth
 {
-    public class LoginRequest
+    public class LoginReqDto
     {
         [Required]
         [EmailAddress]
