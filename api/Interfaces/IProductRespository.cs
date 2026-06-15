@@ -9,11 +9,16 @@ namespace api.Interfaces
 {
     public interface IProductRespository
     {
-        Task<List<Product>> GetAllProductsAsync();
-        Task<Product?> GetProductByIdAsync(int id);
-        Task<Product> CreateProductAsync(Product product);
-        Task<Product?> UpdateProductAsync(int id, UpdateProductReqDto updateProductReqDto);
-        Task<bool> DeleteProductAsync(int id);
-       
+        Task<List<Product>> GetAllProductsAsync(int userId);
+        Task<Product?> GetProductByIdAsync(int id, int userId);
+        //accept DTO + userId instead of raw Product entity
+        // The entity's UserId is set BY THE REPOSITORY, not the client
+        Task<Product> CreateProductAsync(CreateProductReqDto dto, int userId);
+        Task<Product?> UpdateProductAsync(int id, UpdateProductReqDto updateProductReqDto, int userId);
+        Task<bool> DeleteProductAsync(int id, int userId);
+        //Count is a separate method for performance.
+        // SELECT COUNT(*) is much faster than fetching all rows.
+        Task<int> GetProductCountAsync(int userId);
+    
     }
 }
