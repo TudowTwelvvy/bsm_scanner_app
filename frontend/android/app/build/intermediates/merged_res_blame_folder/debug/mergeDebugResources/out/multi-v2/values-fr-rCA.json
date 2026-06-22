@@ -1,0 +1,111 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.bsm_scanner_app-mergeDebugResources-54:/values-fr-rCA/values-fr-rCA.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\cash\\.gradle\\caches\\8.13\\transforms\\f47b234850977251f2a157a275d09bf9\\transformed\\appcompat-1.6.1\\res\\values-fr-rCA\\values-fr-rCA.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,216,323,433,520,626,756,841,921,1012,1105,1203,1298,1398,1491,1584,1679,1770,1861,1947,2057,2168,2271,2382,2490,2597,2756,2855",
+                        "endColumns": "110,106,109,86,105,129,84,79,90,92,97,94,99,92,92,94,90,90,85,109,110,102,110,107,106,158,98,86",
+                        "endOffsets": "211,318,428,515,621,751,836,916,1007,1100,1198,1293,1393,1486,1579,1674,1765,1856,1942,2052,2163,2266,2377,2485,2592,2751,2850,2937"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,60",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,216,323,433,520,626,756,841,921,1012,1105,1203,1298,1398,1491,1584,1679,1770,1861,1947,2057,2168,2271,2382,2490,2597,2756,6649",
+                        "endColumns": "110,106,109,86,105,129,84,79,90,92,97,94,99,92,92,94,90,90,85,109,110,102,110,107,106,158,98,86",
+                        "endOffsets": "211,318,428,515,621,751,836,916,1007,1100,1198,1293,1393,1486,1579,1674,1765,1856,1942,2052,2163,2266,2377,2485,2592,2751,2850,6731"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\cash\\.gradle\\caches\\8.13\\transforms\\63f5a48db6f7ade55d1e51fb31215689\\transformed\\credentials-1.2.0-rc01\\res\\values-fr-rCA\\values-fr-rCA.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,171",
+                        "endColumns": "115,118",
+                        "endOffsets": "166,285"
+                    },
+                    "to": {
+                        "startLines": "29,30",
+                        "startColumns": "4,4",
+                        "startOffsets": "2855,2971",
+                        "endColumns": "115,118",
+                        "endOffsets": "2966,3085"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\cash\\.gradle\\caches\\8.13\\transforms\\4015ea06ca08f3442689da0d56c4163f\\transformed\\core-1.13.1\\res\\values-fr-rCA\\values-fr-rCA.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,153,255,354,456,560,664,778",
+                        "endColumns": "97,101,98,101,103,103,113,100",
+                        "endOffsets": "148,250,349,451,555,659,773,874"
+                    },
+                    "to": {
+                        "startLines": "31,32,33,34,35,36,37,61",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "3090,3188,3290,3389,3491,3595,3699,6736",
+                        "endColumns": "97,101,98,101,103,103,113,100",
+                        "endOffsets": "3183,3285,3384,3486,3590,3694,3808,6832"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\cash\\.gradle\\caches\\8.13\\transforms\\af4fdacbffdaa4612b4ada50c75d54a4\\transformed\\play-services-base-18.9.0\\res\\values-fr-rCA\\values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "220,322,498,624,729,896,1025,1142,1251,1436,1544,1725,1857,2013,2188,2257,2320",
+                        "endColumns": "101,175,125,104,166,128,116,108,184,107,180,131,155,174,68,62,79",
+                        "endOffsets": "321,497,623,728,895,1024,1141,1250,1435,1543,1724,1856,2012,2187,2256,2319,2399"
+                    },
+                    "to": {
+                        "startLines": "38,39,40,41,42,43,44,45,47,48,49,50,51,52,53,54,55",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "3813,3919,4099,4229,4338,4509,4642,4763,5031,5220,5332,5517,5653,5813,5992,6065,6132",
+                        "endColumns": "105,179,129,108,170,132,120,112,188,111,184,135,159,178,72,66,83",
+                        "endOffsets": "3914,4094,4224,4333,4504,4637,4758,4871,5215,5327,5512,5648,5808,5987,6060,6127,6211"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\cash\\.gradle\\caches\\8.13\\transforms\\ea16ba0798cb9688a224af605718c848\\transformed\\play-services-basement-18.9.0\\res\\values-fr-rCA\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "222",
+                        "endColumns": "150",
+                        "endOffsets": "372"
+                    },
+                    "to": {
+                        "startLines": "46",
+                        "startColumns": "4",
+                        "startOffsets": "4876",
+                        "endColumns": "154",
+                        "endOffsets": "5026"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\cash\\.gradle\\caches\\8.13\\transforms\\8f48668fe6a65957ee54649060b2084e\\transformed\\browser-1.4.0\\res\\values-fr-rCA\\values-fr-rCA.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,162,264,383",
+                        "endColumns": "106,101,118,104",
+                        "endOffsets": "157,259,378,483"
+                    },
+                    "to": {
+                        "startLines": "56,57,58,59",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "6216,6323,6425,6544",
+                        "endColumns": "106,101,118,104",
+                        "endOffsets": "6318,6420,6539,6644"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.bsm_scanner_app-mergeDebugResources-54:/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\cash\\.gradle\\caches\\8.13\\transforms\\f47b234850977251f2a157a275d09bf9\\transformed\\appcompat-1.6.1\\res\\values-port\\values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        }
+    ]
+}
