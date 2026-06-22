@@ -1,9 +1,8 @@
+import 'package:bsm_scanner_app/features/auth/data/auth_repository_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../../../core/providers/firebase_providers.dart';
-import '../../auth/data/auth_repository.dart';
 import '../../scanner/data/product_repository.dart';
 import '../../scanner/domain/product_entity.dart';
 
@@ -137,19 +136,20 @@ import '../../scanner/domain/product_entity.dart';
   }
 }*/
 
-// These providers combine auth + data. They automatically switch when the user changes.
-final userProductsProvider = StreamProvider<List<ProductEntity>>((ref) {
-  final user = ref.watch(authStateChangesProvider).value;
-  
-  if (user == null) return const Stream.empty();
-  return ref.watch(productRepositoryProvider).watchUserProducts(user.uid);
+//autoDispose destroys the provider when the screen is no longer visible.
+//When the user returns from the ScannerScreen, it re-creates and re-fetches.
+//This gives us "pull to refresh" behavior automatically.
+
+//Without autoDispose: The list never updates after scanning. The user would
+//have to kill and reopen the app to see new scans.
+final userProductsProvider = FutureProvider.autoDispose<List<ProductEntity>>((ref) {
+  // FutureProvider (not StreamProvider) because REST APIs don't push real-time
+  // updates like Firestore. We fetch once when the screen opens.
+  return ref.watch(productRepositoryProvider).fetchProducts();
 });
 
-final scanCountProvider = StreamProvider<int>((ref) {
-  final user = ref.watch(authStateChangesProvider).value;
-  
-  if (user == null) return Stream.value(0);
-  return ref.watch(productRepositoryProvider).watchScanCount(user.uid);
+final scanCountProvider = FutureProvider.autoDispose<int>((ref) {
+  return ref.watch(productRepositoryProvider).fetchCount();
 });
 
 class ProductsListScreen extends ConsumerWidget {
@@ -257,32 +257,35 @@ class _ProductTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Dismissible(
-      key: Key(product.id),
+      //ValueKey works with any object type. Key() only accepts String.
+      //Since product.id is int, ValueKey is required.
+      key: ValueKey(product.id),
+      //Background shown when swiping left
       background: Container(
         color: Colors.red,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 16),
         child: const Icon(Icons.delete, color: Colors.white),
       ),
-      direction: DismissDirection.endToStart,
+      direction: DismissDirection.endToStart,// Only allow left swipe
       onDismissed: (_) async {
-        final user = ref.read(authStateChangesProvider).value;
-        if (user != null) {
-          await ref.read(productRepositoryProvider).deleteProduct(user.uid, product.id);
-        }
+        await ref.read(productRepositoryProvider).deleteProduct(product.id);
+        //We don't manually refresh the list. autoDispose providers
+        //will rebuild on next frame. But to be immediate:
+        ref.invalidate(userProductsProvider);
+        ref.invalidate(scanCountProvider);
       },
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        child: ListTile(
-          leading: Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Icon(Icons.qr_code),
+      child: ListTile(
+        onTap: () => context.go('/product/${product.id}'),
+        leading: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            borderRadius: BorderRadius.circular(8),
           ),
+          child: const Icon(Icons.qr_code),
+        ),
           title: Text(
             product.productName ?? product.barcode,
             style: const TextStyle(fontWeight: FontWeight.w600),
@@ -294,7 +297,7 @@ class _ProductTile extends ConsumerWidget {
             style: const TextStyle(fontSize: 12),
           ),
           trailing: const Icon(Icons.chevron_right),
-        ),
+        
       ),
     );
   }

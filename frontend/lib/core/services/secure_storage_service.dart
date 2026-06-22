@@ -1,12 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-// WHY: JWT tokens are like house keys. If someone steals them, they can
-// impersonate the user. Storing in SharedPreferences is like leaving your
-// key under the doormat — any app with root access can read it.
-//
-// FlutterSecureStorage encrypts data using:
-// - iOS: Keychain (hardware-backed encryption)
-// - Android: Keystore system (hardware-backed on modern devices)
+
 class SecureStorageService {
   // aOptions = Android-specific options.
   // encryptedSharedPreferences: true forces encryption even on older Android

@@ -58,6 +58,16 @@ dependencies:
   # request/response logging, timeout handling, and form data support.
   dio: ^5.9.2
 
+  # WHY: Decodes JWT tokens without verifying the signature.
+  # We use this to check if the token is expired before sending it.
+  # The API verifies the signature — we just need to read the expiry.
+  jwt_decoder: ^2.0.1
+
+  # WHY: Stores the JWT token in the phone's encrypted hardware keychain.
+  # SharedPreferences is plain text and can be read by rooted devices.
+  # SecureStorage uses iOS Keychain and Android Keystore encryption.
+  flutter_secure_storage: ^10.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

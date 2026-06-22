@@ -1,4 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bsm_scanner_app/features/auth/data/auth_repository_provider.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/auth_repository.dart';
@@ -203,6 +204,8 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _displayNameController = TextEditingController();
+  
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
@@ -212,6 +215,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _displayNameController.dispose();
     super.dispose();
   }
 
@@ -227,16 +231,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         await authRepo.registerWithEmail(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
+          displayName: _displayNameController.text.trim().isEmpty? null : _displayNameController.text.trim(),
         );
       } else {
         await authRepo.signInWithEmail(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
+          
         );
       }
       // SUCCESS: go_router detects the auth change and redirects automatically.
       // We do NOT navigate manually here.
-    } on FirebaseAuthException catch (e) {
+      //AuthException is our custom exception from the repository.
+    } on AuthException catch (e) {
+      //translate the code to a human message and show a SnackBar.
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -245,7 +253,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         );
       }
-    } finally {
+    }catch (e) {
+    // CATCH ALL: Network errors, Dio errors, anything unexpected
+    debugPrint('🔴 UNEXPECTED ERROR: $e');
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+     }
+    }
+     finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -269,7 +289,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -327,6 +347,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 16),
+                  if (_isRegistering) ...[
+                    TextFormField(
+                      controller: _displayNameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Display Name (optional)',
+                        prefixIcon: Icon(Icons.person_outline),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submit,

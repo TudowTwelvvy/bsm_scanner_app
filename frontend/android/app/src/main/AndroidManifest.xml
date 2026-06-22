@@ -1,16 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    //internet permissions for firebase auth
+    <!-- Internet: Required for API calls -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    //camera permissions for qr code scanning
+    <!-- Camera: Required for barcode scanning -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     
+    <!-- WHY: android:usesCleartextTraffic="true" allows HTTP (not HTTPS)
+         connections to your local API during development.
+         REMOVE THIS in production — always use HTTPS for real APIs. -->
     <application
         android:label="bsm_scanner_app"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"

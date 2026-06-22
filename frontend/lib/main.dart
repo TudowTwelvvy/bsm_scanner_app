@@ -1,16 +1,22 @@
-import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'firebase_options.dart';
+//import 'firebase_options.dart';
 import 'router/app_router.dart';
 
-void main() async {
+/*void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
     // ProviderScope = the "brain" of Riverpod. Must wrap everything.
+    const ProviderScope(child: ScannerApp()),
+  );
+}*/
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
     const ProviderScope(child: ScannerApp()),
   );
 }

@@ -1,49 +1,67 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/constants/firestore_paths.dart';
-import '../../../core/providers/firebase_providers.dart';
+import '../../../core/providers/core_providers.dart';
 import '../domain/product_entity.dart';
 
 class ProductRepository {
-  final FirebaseFirestore _firestore;
-  ProductRepository(this._firestore);
+  final Dio _dio;
 
-  CollectionReference<Map<String, dynamic>> _userProducts(String userId) {
-    return _firestore
-        .collection(FirestorePaths.users)
-        .doc(userId)
-        .collection(FirestorePaths.products);
-  }
+  ProductRepository(this._dio);
 
+  //create
+  //POST /api/product
+  //the API reads UserId from the JWT token automatically.
+  //We only send the product data, not who owns it.
   Future<void> saveProduct(ProductEntity product) async {
-    await _userProducts(product.userId)
-        .doc(product.id)
-        .set(product.toMap());
+    await _dio.post('/api/product', data: product.toMap());
   }
 
-  //Stream = real-time. Firestore pushes updates to the UI automatically.
-  Stream<List<ProductEntity>> watchUserProducts(String userId) {
-    return _userProducts(userId)
-        .orderBy('scannedAt', descending: true)
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return ProductEntity.fromMap(doc.id, doc.data());
-      }).toList();
+  //Get 1
+  // GET /api/product/{id}
+  Future<ProductEntity?> getProductById(int productId) async {
+    try {
+      final response = await _dio.get('/api/product/$productId');
+      return ProductEntity.fromMap(response.data);
+    } on DioException catch (e) {
+      // 404 = product not found or doesn't belong to this user
+      if (e.response?.statusCode == 404) return null;
+      rethrow; // Let the caller handle unexpected errors
+    }
+  }
+
+  //Get all
+  // GET /api/product
+  // Returns List<dynamic> which we map to List<ProductEntity>
+  Future<List<ProductEntity>> fetchProducts() async {
+    final response = await _dio.get('/api/product');
+    final List<dynamic> data = response.data;
+    return data.map((json) => ProductEntity.fromMap(json)).toList();
+  }
+
+  //update
+  // PUT /api/product/{id}
+  Future<void> updateProduct(ProductEntity product) async {
+    await _dio.put('/api/product/${product.id}', data: {
+      'productName': product.productName,
+      'notes': product.notes,
     });
   }
 
-  Stream<int> watchScanCount(String userId) {
-    return _userProducts(userId)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.length);
+  //delete
+  // DELETE /api/product/{id}
+  Future<void> deleteProduct(int productId) async {
+    await _dio.delete('/api/product/$productId');
   }
 
-  Future<void> deleteProduct(String userId, String productId) async {
-    await _userProducts(userId).doc(productId).delete();
+  //count
+  // GET /api/product/count
+  Future<int> fetchCount() async {
+    final response = await _dio.get('/api/product/count');
+    return response.data as int;
   }
 }
 
+// WHY: Provider makes the repository available via ref.watch/read.
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
-  return ProductRepository(ref.watch(firestoreProvider));
+  return ProductRepository(ref.watch(dioProvider));
 });
