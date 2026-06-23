@@ -1,87 +1,25 @@
-# ==========================================
-# FLUTTER (bsm_app/) IGNORES
-# ==========================================
-
-# Build outputs
-bsm_app/build/
-bsm_app/.dart_tool/
-bsm_app/.flutter-plugins
-bsm_app/.flutter-plugins-dependencies
-bsm_app/.packages
-bsm_app/pubspec.lock
+﻿# Flutter/Dart
+**/build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+pubspec.lock
 
 # Android
-bsm_app/android/.gradle/
-bsm_app/android/app/debug/
-bsm_app/android/app/profile/
-bsm_app/android/app/release/
-bsm_app/android/key.properties
-bsm_app/**/*.jks
-bsm_app/android/local.properties
+**/android/.gradle/
+**/android/app/*.keystore
+**/android/key.properties
 
 # iOS
-bsm_app/ios/Pods/
-bsm_app/ios/.symlinks/
-bsm_app/ios/Flutter/Flutter.framework/
-bsm_app/ios/Flutter/Flutter.podspec
-bsm_app/ios/Runner.xcworkspace/
-bsm_app/ios/Runner/Pods/
+**/ios/Pods/
+**/ios/.symlinks/
 
 # IDE
-bsm_app/.idea/
-bsm_app/.vscode/
-bsm_app/*.iml
+.idea/
+*.iml
+.vscode/
 
-# Coverage
-bsm_app/coverage/
-
-# Generated files
-bsm_app/lib/generated_plugin_registrant.dart
-bsm_app/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
-
-# ==========================================
-# ASP.NET API (api/) IGNORES
-# ==========================================
-
-# Build outputs
-api/bin/
-api/obj/
-api/out/
-api/publish/
-
-# User-specific files
-api/*.user
-api/*.suo
-api/.vs/
-api/.vscode/
-
-# NuGet
-api/packages/
-api/**/*.nupkg
-
-# Entity Framework
-api/Migrations/  # Optional: keep if you want versioned migrations
-
-# Secrets
-api/appsettings.Development.json
-api/secrets.json
-
-# Logs
-api/logs/
-api/*.log
-
-# ==========================================
-# GLOBAL IGNORES
-# ==========================================
-
-# OS files
+# OS
 .DS_Store
 Thumbs.db
-desktop.ini
-
-# Large files
-*.mp4
-*.mov
-*.apk
-*.aab
-*.ipa
